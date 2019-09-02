@@ -73,7 +73,7 @@ class Login(object):
         return isSuccess(jsonRet), '%s:%s' % (jsonRet['username'], jsonRet['result_message']) if jsonRet \
             else 'uamauthclient failed'
 
-    def login(self, userName, userPwd, autoCheck=2):
+    def login(self, userName, userPwd, autoCheck=0):
         # 登录有两种api
         # for count in range(2):
         #     result, msg = self._login(userName, userPwd, autoCheck, type=(count % 2))
@@ -88,14 +88,14 @@ class Login(object):
         return False, '登录失败'
 
     @loginLogic
-    def _login(self, userName, userPwd, autoCheck=2, type=TYPE_LOGIN_NORMAL_WAY):
+    def _login(self, userName, userPwd, autoCheck=0, type=TYPE_LOGIN_NORMAL_WAY):
         if type == TYPE_LOGIN_OTHER_WAY:
             self._urlInfo = loginUrls['other']
             return self._loginAsyncSuggest(userName, userPwd,autoCheck, type)
         self._urlInfo = loginUrls['normal']
         return self._loginNormal(userName, userPwd,autoCheck, type)
 
-    def _loginNormal(self, userName, userPwd, autoCheck=2,type=TYPE_LOGIN_NORMAL_WAY):
+    def _loginNormal(self, userName, userPwd, autoCheck=0,type=TYPE_LOGIN_NORMAL_WAY):
         status,msg = self._login_init()
         if not status:
             return status, msg
@@ -133,7 +133,7 @@ class Login(object):
             return False, 'uamtk failed'
         return self._uamauthclient(apptk)
 
-    def _loginAsyncSuggest(self, userName, userPwd, autoCheck=2,type=TYPE_LOGIN_OTHER_WAY):
+    def _loginAsyncSuggest(self, userName, userPwd, autoCheck=0,type=TYPE_LOGIN_OTHER_WAY):
         self._init()
         if autoCheck == CAPTCHA_CHECK_METHOD_THREE:
             results, verify = Captcha().verifyCodeAuto()
